@@ -8,6 +8,21 @@ class SeatBooking:
         self.seat_map = [['F' if (i + 1) % 20 != 0 else 'X' for i in range(80)] for _ in self.row_labels]
 
 
+    def check_availability(self):
+        """ Checks and displays available seats. """
+        print("\nAvailable Seats:")
+        available = False
+        # go over the seat map to find free seats and print
+        for i, row in enumerate(self.seat_map):
+            for j, seat in enumerate(row):
+                if seat == 'F':
+                    print(f"{self.row_labels[i]}{self.column_labels[j]}", end=' ')
+                    available = True
+        if not available:
+            print("No available seats.")
+        else:
+            print()
+        print() # Empty line for better formatting
 
     # function to run the program
     def run(self):
@@ -23,6 +38,8 @@ class SeatBooking:
             print("5. Exit Program")
             choice = input("Choose an option (1-5): ")
 
+            if choice == '1':
+                self.check_availability()
 
 # run the application
 if __name__ == "__main__":

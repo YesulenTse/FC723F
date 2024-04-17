@@ -1,3 +1,4 @@
+from tabulate import tabulate
 class SeatBooking:
     def __init__(self):
         # customize the seat map, with A_F and 1-80 columns
@@ -11,20 +12,16 @@ class SeatBooking:
             for col in range(4):
                 self.seat_map[row][col] = 'S'  # Mark storage areas as 'S'
 
-        # Define aisles (every fourth seat)
-        for row in range(6):
-            for col in range(3, 80, 4):
-                self.seat_map[row][col] = 'X'  # Mark aisles as 'X'
-
     def display_seats(self):
         """ Display the current seat map. """
         # Print header with column labels
         print("\nCurrent Seat Map:")
-        print("     " + " ".join(self.column_labels))
-        # Print each row with row labels
+        table = [[''] + self.column_labels]  # Add empty header for row labels
         for i in range(len(self.seat_map)):
-            print(self.row_labels[i] + "   " + " ".join(self.seat_map[i]))
-        print()  # Empty line for better for better formatting
+            row = [self.row_labels[i]] + self.seat_map[i]
+            table.append(row)
+        # Display table using tabulate
+        print(tabulate(table, headers='firstrow', tablefmt='grid'))
     def check_availability(self):
         """ Checks and displays available seats. """
         print("\nAvailable Seats:")

@@ -7,7 +7,7 @@ class SeatBooking:
         # X = Aisle, S = Storage, F = Free, R = Reserved
         self.row_labels = ['A', 'B', 'C', 'D', 'E', 'F', ]
         self.column_labels = [str(i) for i in range(1, 81)]
-        # layout with aisles after every 20 seats for simplicity
+        # layout with aisles(X) after every 20 seats for simplicity
         self.seat_map = [['F' if (i + 1) % 20 != 0 else 'X' for i in range(80)] for _ in self.row_labels]
         self.booked_seats = {}  # to store booking references
         self.booking_references = set()
@@ -28,12 +28,12 @@ class SeatBooking:
                 return reference
 
     def save_data(self):
-        """Save booking and customer data to a text file."""
+        """save booking and customer data to a text file."""
         with open("booking_data.txt", "w") as file:
             for ref, details in self.booked_seats.items():
                 file.write(f"{details['Booking Reference']},{details['Passport Number']},{details['First Name']},{details['Last Name']},{details['Seat Row']},{details['Seat Column']}\n")
     def load_data(self):
-        """Load booking and customer data from a text file."""
+        """load booking and customer data from a text file."""
         try:
             with open("booking_data.txt", "r") as file:
                 for line in file:
@@ -48,16 +48,18 @@ class SeatBooking:
                     row_index = self.row_labels.index(seat_row)
                     col_index = self.column_labels.index(seat_column)
                     self.seat_map[row_index][col_index] = ref
-                    self.booking_references.add(ref)  # Add booking reference to the set
+                    self.booking_references.add(ref)  # add booking reference to the set
         except FileNotFoundError:
             print("No existing booking data found.")
 
     def display_seats(self):
         """ display the current seat map. """
-        # Print header with column labels
+        # print header with column labels
         print("\nCurrent Seat Map:")
-        table = [[''] + self.column_labels]  # add empty header for row letters
+        table = [[''] + self.column_labels]  # add empty header for the letters' row
+        # loop through the rows
         for i in range(len(self.seat_map)):
+            # create a new row for the table by combining the row label with the seat map data
             row = [self.row_labels[i]] + self.seat_map[i]
             table.append(row)
         # display table using tabulate
@@ -77,7 +79,7 @@ class SeatBooking:
             print("No available seats.")
 
     def book_or_free_seat(self, action='book'):
-        """ Allows a user to book or free a seat. """
+        """ allows a user to book or free a seat. """
         self.display_seats()  # display current seat map
         row = input("Enter the row (A-F): ").upper()  # get user input for row
         column = input("Enter the seat number (1-80): ")  # get user input for column
@@ -87,7 +89,7 @@ class SeatBooking:
             row_index = self.row_labels.index(row)
             col_index = self.column_labels.index(column)
 
-            # if user wants to book a seat and the seat is free, book it
+            # if user wants to book a seat and the seat is free, ask for details and book it
             if action == 'book' and self.seat_map[row_index][col_index] == 'F':
                 booking_ref = self.generate_booking_reference()
                 first_name = input("Enter first name: ")
@@ -126,7 +128,7 @@ class SeatBooking:
 
     # function for running the program
     def run(self):
-        """ Main menu for the seat booking application. """
+        """ main menu for the seat booking application. """
         choice = ''
         # print the menu unless the user exits
         while choice != '5':
